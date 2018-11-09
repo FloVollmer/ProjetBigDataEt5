@@ -7,7 +7,7 @@ from scipy.io import loadmat
 def negatif (couche) :
 	return 255 - couche
 	
-def pretraitement (image_idx) :
+def pretraiteImg (image_idx) :
 
 	minCouche = [255, 255, 255]
 	maxCouche = [0, 0, 0]
@@ -52,18 +52,41 @@ def pretraitement (image_idx) :
 				for i in range(32) :
 					train_data['X'][j, i, k, image_idx] = negatif(train_data['X'][j, i, k, image_idx])
 			
-	print('Label', train_data['y'][image_idx])
+	#print('Label', train_data['y'][image_idx])
 	
-	barycentre = [0, 0, 0, 0]
-	for j in range(32) :
-		for i in range(32) :
-			for k in range(3) :
+#	barycentre = [0, 0, 0, 0]
+#	for j in range(32) :
+#		for i in range(32) :
+#			for k in range(3) :
+#	
+
 	
-	plt.imshow(train_data['X'][:, :, :, image_idx])
-	plt.show()
+#	imgTest = train_data['X'][:, :, :, image_idx].copy()
+#	for j in range(32) :
+#		for i in range(32) :
+#			for k in range(3) :
+#				imgTest[j, i, 0] = (i+j)*4
+#				imgTest[j, i, 1] = 0
+#				imgTest[j, i, 2] = 255
+
+
+	
+def pretraitement():
+	for i in range(13) :
+		pretraiteImg(i);
+		
+	
 
 
 train_data = loadmat('train_32x32.mat')
 test_data = loadmat('test_32x32.mat')
 
-pretraitement(20);
+pretraitement()
+
+classe1 = train_data['y'].squeeze(1)[:13]==2
+#print(classe1.shape)
+#print(train_data['X'].shape)
+imgTest = np.mean(train_data['X'][:, :, :, classe1], axis=3)
+#print(train_data)
+plt.imshow(imgTest)	
+plt.show()
