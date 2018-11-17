@@ -58,13 +58,54 @@ def noirSurBlanc (img_id) :
 				for i in range(32) :
 					train_data['X'][j, i, k, img_id] = negatif(train_data['X'][j, i, k, img_id])
 					
-					
+def noirSurBlanc2 (img_id) :	
+	
+	# On regarde pour chaque couche si les bordures sont plutot claires ou foncees
+	comptePixelBlanc = 0
+	comptePixelNoir = 0
+	for k in range(3) :
+		for i in range(32) :
+			for j in range(32) : 
+				if train_data['X'][i, j, k, img_id] >= 255 :
+					comptePixelBlanc += 1
+				else :
+					comptePixelNoir += 1
+		if comptePixelNoir > comptePixelBlanc :
+			for i in range(32) :
+				for j in range(32) : 
+					train_data['X'][i, j, k, img_id] = negatif(train_data['X'][i, j, k, img_id])
+		comptePixelBlanc = 0
+		comptePixelNoir = 0
+						
+def noirSurBlanc3 (img_id) :	
+	
+	# On regarde pour chaque couche si les bordures sont plutot claires ou foncees
+	comptePixelBlanc = 0
+	comptePixelNoir = 0
+	for k in range(3) :
+		for i in range(32) :
+			for j in range(32) : 
+				if train_data['X'][i, j, k, img_id] >= 255 :
+					comptePixelBlanc += 1
+				else :
+					comptePixelNoir += 1
+		if comptePixelNoir > comptePixelBlanc :
+			for i in range(32) :
+				for j in range(32) : 
+					if train_data['X'][i, j, k, img_id] <= 0 :
+						train_data['X'][i, j, k, img_id] = 255
+					elif train_data['X'][i, j, k, img_id] >= 255 :
+						train_data['X'][i, j, k, img_id] = 0
+		comptePixelBlanc = 0
+		comptePixelNoir = 0
+						
+						
 	
 def pretraiteImg (img_id) :
 	
-	#isohelie(img_id)
+	isohelie(img_id)
 	
-	noirSurBlanc(img_id)
+	noirSurBlanc2(img_id)
 	
 	
 	
