@@ -12,19 +12,44 @@ class Classifieur :
 		self.td = train_data
 		self.testSize = testSize
 		for i in range(1, 11) :
-			self.barycentreX(i)
+			self.barycentres.append(self.barycentreX(i))
+			
+			
+	def tester(self) :
+		tauxExact = 0
+		for i in range(0, self.testSize) :
+			labelDeter = self.determinerLabel(self.td['X'][:, :, :, i])
+			print(str(self.td['y'][i]) + ' -> ' + str(labelDeter))
+			if (labelDeter == self.td['y'][i]) :
+				tauxExact += 1
+			
+		tauxExact /= self.testSize;
+		print('tauxExact = ' + str(tauxExact))
+	
+	def determinerLabel(self, image) :
+		dMin = self.distanceEntre2images(self.barycentres[0], image)
+		labelMin = 1
+		
+		for i in range (1, 10) :
+			dBary = self.distanceEntre2images(self.barycentres[i], image)
+			if dBary < dMin :
+				dMin = dBary
+				labelMin = i+1
+				
+		return labelMin
+		
 
-	def distanceEntre2images(self, imageBary, imageCible):
-		distanceParcouru = 0
+	def distanceEntre2images(self, img1, img2) :
+		distance = 0.0
 		for k in range(3) :
 			for i in range(32) :
 				for j in range(32) : 
-					distanceParcouru += (imageBary[i,j,k]-imageCible[i,j,k])*(imageBary[i,j,k]-imageCible[i,j,k])
-		distanceParcouru = np.sqrt(distanceParcouru)
-		print(distanceParcouru)
+					distance += (img1[i,j,k]-img2[i,j,k])*(img1[i,j,k]-img2[i,j,k])
+		distance = np.sqrt(distance)
+		#print(distance)
+		return distance
 		
 	def barycentreX(self, label) :
-		
 		try :
 			img = Image.open('barycentre' + str(label) + '.png')
 		except FileNotFoundError :

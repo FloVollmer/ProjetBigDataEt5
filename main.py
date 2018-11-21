@@ -16,16 +16,12 @@ preProc = PreProc(train_data, testSize)
 preProc.pretraiteDatas()
 
 
-#print(classe1.shape)
-#print(train_data['X'].shape)
-classifieur = Classifieur(train_data, testSize)
-imgTest = classifieur.barycentreX(2)#np.mean(train_data['X'][:, :, :, classe1], axis=3)
-#print(imgTest.shape)
-classifieur.distanceEntre2images(imgTest.astype("int"), train_data['X'][:, :, :, 3])
-#plt.imshow(imgTest.astype("int"))
 
+classifieur = Classifieur(train_data, testSize)
+#imgTest = classifieur.barycentreX(2)
+#classifieur.distanceEntre2images(imgTest.astype("int"), train_data['X'][:, :, :, 3])
+classifieur.tester()
 
 plt.imshow(train_data['X'][:, :, :, 3])
-#plt.savefig('foo.png')
 #print('Label', train_data['y'][3])
 plt.show()
