@@ -1,13 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import loadmat
-#wher
+import sklearn.decomposition as SK
 
 class PreProc :
 	
 	def __init__(self, train_data, testSize) :
 		self.td = train_data
 		self.testSize = testSize
+		
+	def PCAVecteur(self, train_data, taille_pca) :
+		print(train_data['X'].shape)
+		temp = train_data['X']
+		print(temp)
+		temp = np.transpose(temp, (3, 0, 1, 2))
+		print(temp.shape)
+		size = temp.shape[0]
+		temp = np.reshape(temp, (size, 32*32*3))
+		print(temp.shape)
+		PCA = SK.PCA(n_components=4)
+		result = PCA.fit_transform(temp)
+		print(result)
+		print(result.shape)
 	
 	def negatif (self, couche) :
 		return 255 - couche
@@ -111,6 +125,7 @@ class PreProc :
 		
 	
 	def pretraiteDatas (self) :
+		self.PCAVecteur(self.td, 6)
 		for i in range(self.testSize) :
 			self.pretraiteImg(i);
 

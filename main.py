@@ -3,11 +3,13 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 from pretraitement import PreProc
 from classifieur import Classifieur
+import sklearn.decomposition as SK
 
 train_data = loadmat('train_32x32.mat')
 test_data = loadmat('test_32x32.mat')
 
-testSize = 150
+testSize = np.size(train_data['X'][0, 0, 0, :])
+testSize =300
 classe1 = train_data['y'].squeeze(1)[:testSize]==2 # label a tester
 train_data['X'] = train_data['X'][:, :, :, :testSize] # taille d'echantillon a tester
 
