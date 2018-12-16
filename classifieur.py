@@ -8,15 +8,13 @@ class Classifieur :
 
 	barycentres = []
 
-	def __init__(self, train_data, testSize) :
+	def __init__(self, train_data, test_data, testSize) :
 		self.td = train_data
+		self.test = test_data
 		self.testSize = testSize
-		print(self.td['X'].shape)
-		self.td['X'] = np.transpose(self.td['X'], (3, 0, 1, 2))
-		self.td['X'] = np.reshape(self.td['X'], (self.td['X'].shape[0], 32*32*3))
 		for i in range(1, 11) :
 			self.barycentres.append(self.barycentreX(i))
-		self.barycentres = np.reshape(self.barycentres, (10, 32*32*3))
+		self.barycentres = np.reshape(self.barycentres, (10, len(self.barycentres[1])))
 			
 	def tester(self) :
 		tauxExact = 0
@@ -46,7 +44,7 @@ class Classifieur :
 		distance = 0.0
 		for k in range(3) :
 			for i in range(32) :
-				for j in range(32) : 
+				for j in range(32) :
 					distance += (img1[i,j,k]-img2[i,j,k])*(img1[i,j,k]-img2[i,j,k])
 		distance = np.sqrt(distance)
 		#print(distance)

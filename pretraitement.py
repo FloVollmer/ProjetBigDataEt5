@@ -5,22 +5,29 @@ import sklearn.decomposition as SK
 
 class PreProc :
 	
-	def __init__(self, train_data, testSize) :
+	def __init__(self, train_data, test_data, testSize) :
 		self.td = train_data
+		self.test = test_data
 		self.testSize = testSize
 		
-	def PCAVecteur(self, train_data, taille_pca) :
-		print(train_data['X'].shape)
-		temp = train_data['X']
-		temp = np.transpose(temp, (3, 0, 1, 2))
-		print(temp.shape)
-		size = temp.shape[0]
-		temp = np.reshape(temp, (size, 32*32*3))
-		print(temp.shape)
+	def applatirDonnees(self) :
+	
+		print(self.td['X'].shape)
+		self.td['X'] = np.transpose(self.td['X'], (3, 0, 1, 2))
+		self.td['X'] = np.reshape(self.td['X'], (self.td['X'].shape[0], 32*32*3))
+		print(self.td['X'].shape)
+		
+		print(self.test['X'].shape)
+		self.test['X'] = np.transpose(self.test['X'], (3, 0, 1, 2))
+		self.test['X'] = np.reshape(self.test['X'], (self.test['X'].shape[0], 32*32*3))
+		print(self.test['X'].shape)
+	
+		
+	def PCAVecteur(self, taille_pca) :
 		PCA = SK.PCA(n_components=taille_pca)
-		result = PCA.fit_transform(temp)
+		result = PCA.fit_transform(self.td['X'])
 		print(result.shape)
-		return result
+		self.td['X'] = result
 	
 	def negatif (self, couche) :
 		return 255 - couche
@@ -126,7 +133,8 @@ class PreProc :
 	def pretraiteDatas (self) :
 		for i in range(self.testSize) :
 			self.pretraiteImg(i);
-		return self.PCAVecteur(self.td, 6)
+		self.applatirDonnees();
+		self.PCAVecteur(6)
 		
 
 	
