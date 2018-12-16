@@ -12,16 +12,15 @@ class PreProc :
 	def PCAVecteur(self, train_data, taille_pca) :
 		print(train_data['X'].shape)
 		temp = train_data['X']
-		print(temp)
 		temp = np.transpose(temp, (3, 0, 1, 2))
 		print(temp.shape)
 		size = temp.shape[0]
 		temp = np.reshape(temp, (size, 32*32*3))
 		print(temp.shape)
-		PCA = SK.PCA(n_components=4)
+		PCA = SK.PCA(n_components=taille_pca)
 		result = PCA.fit_transform(temp)
-		print(result)
 		print(result.shape)
+		return result
 	
 	def negatif (self, couche) :
 		return 255 - couche
@@ -125,9 +124,10 @@ class PreProc :
 		
 	
 	def pretraiteDatas (self) :
-		self.PCAVecteur(self.td, 6)
 		for i in range(self.testSize) :
 			self.pretraiteImg(i);
+		return self.PCAVecteur(self.td, 6)
+		
 
 	
 

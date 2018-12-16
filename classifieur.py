@@ -11,14 +11,17 @@ class Classifieur :
 	def __init__(self, train_data, testSize) :
 		self.td = train_data
 		self.testSize = testSize
+		print(self.td['X'].shape)
+		self.td['X'] = np.transpose(self.td['X'], (3, 0, 1, 2))
+		self.td['X'] = np.reshape(self.td['X'], (self.td['X'].shape[0], 32*32*3))
 		for i in range(1, 11) :
 			self.barycentres.append(self.barycentreX(i))
-			
+		self.barycentres = np.reshape(self.barycentres, (10, 32*32*3))
 			
 	def tester(self) :
 		tauxExact = 0
 		for i in range(0, self.testSize) :
-			labelDeter = self.determinerLabel(self.td['X'][:, :, :, i])
+			labelDeter = self.determinerLabel(self.td['X'][i, :])
 			# print(str(self.td['y'][i]) + ' -> ' + str(labelDeter))
 			if (labelDeter == self.td['y'][i]) :
 				tauxExact += 1
@@ -27,11 +30,11 @@ class Classifieur :
 		print('tauxExact = ' + str(tauxExact))
 	
 	def determinerLabel(self, image) :
-		dMin = self.distanceEntre2images(self.barycentres[0], image)
+		dMin = self.distanceEntre2vecteurs(self.barycentres[0], image)
 		labelMin = 1
 		
 		for i in range (1, 10) :
-			dBary = self.distanceEntre2images(self.barycentres[i], image)
+			dBary = self.distanceEntre2vecteurs(self.barycentres[i], image)
 			if dBary < dMin :
 				dMin = dBary
 				labelMin = i+1
@@ -49,16 +52,26 @@ class Classifieur :
 		#print(distance)
 		return distance
 		
+	def distanceEntre2vecteurs(self, vect1, vect2) :
+		distance = 0.0
+		for i in range(vect1.size) :
+			distance += (vect1[i]-vect2[i])*(vect1[i]-vect2[i])
+		distance = np.sqrt(distance)
+		return distance
+		
 	def barycentreX(self, label) :
-		try :
-			img = Image.open('barycentre' + str(label) + '.png')
-		except FileNotFoundError :
 			tableBool = self.td['y'].squeeze(1)[:self.testSize]==label
-			barycentre = np.mean(self.td['X'][:, :, :, tableBool], axis=3)
-			scipy.misc.imsave('barycentre' + str(label) + '.png', barycentre)
+			barycentre = np.mean(self.td['X'][tableBool, :], axis=0)
 			return barycentre
-		else :
-			return np.array(img)
 		
-		
+	# def barycentreX(self, label) :
+		# try :
+			# img = Image.open('barycentre' + str(label) + '.png')
+		# except FileNotFoundError :
+			# tableBool = self.td['y'].squeeze(1)[:self.testSize]==label
+			# barycentre = np.mean(self.td['X'][:, :, :, tableBool], axis=3)
+			# scipy.misc.imsave('barycentre' + str(label) + '.png', barycentre)
+			# return barycentre
+		# else :
+			# return np.array(img)	
 		
