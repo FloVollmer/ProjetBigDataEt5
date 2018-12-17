@@ -138,7 +138,7 @@ class PreProc :
 			self.pretraiteImg(i, self.td['X']);
 			#self.pretraiteImg(i, self.test['X']);
 		self.applatirDonnees();
-		self.PCAVecteur(6)
+		self.PCAVecteur(20)
 		
 
 	
