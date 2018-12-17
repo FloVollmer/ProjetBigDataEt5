@@ -19,9 +19,9 @@ class Classifieur :
 	def tester(self) :
 		tauxExact = 0
 		for i in range(0, self.testSize) :
-			labelDeter = self.determinerLabel(self.td['X'][i, :])
-			# print(str(self.td['y'][i]) + ' -> ' + str(labelDeter))
-			if (labelDeter == self.td['y'][i]) :
+			labelDeter = self.determinerLabel(self.test['X'][i, :])
+			# print(str(self.test['y'][i]) + ' -> ' + str(labelDeter))
+			if (labelDeter == self.test['y'][i]) :
 				tauxExact += 1
 			
 		tauxExact /= self.testSize;
