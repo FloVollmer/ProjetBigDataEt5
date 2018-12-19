@@ -74,7 +74,6 @@ class PreProc :
 			#print("borduresClaires[" + str(k) + "] = " + str(borduresClaires[k]))
 			for j in range(8) :
 				for i in range(8) :
-					#img_set[j+12, i+12, k, img_id] = k*80
 					borduresClaires[k] -= img_set[j+12, i+12, k, img_id]*2;
 			#print("borduresClaires[" + str(k) + "] = " + str(borduresClaires[k]))
 		
@@ -136,7 +135,7 @@ class PreProc :
 	def pretraiteDatas (self) :
 		for i in range(self.testSize) :
 			self.pretraiteImg(i, self.td['X']);
-			#self.pretraiteImg(i, self.test['X']);
+			self.pretraiteImg(i, self.test['X']);
 		self.applatirDonnees();
 		self.PCAVecteur(20)
 		
