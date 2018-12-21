@@ -18,7 +18,7 @@ def toutTester(trainSize, testSize, valPCA) :
 	test_data['y'] = test_data['y'][:testSize]
 
 	preProc = PreProc(train_data, test_data, trainSize, testSize)
-	preProc.pretraiteDatas(20)
+	preProc.pretraiteDatas(valPCA)
 	
 	# test du classieur proches voisins
 	classifieurVoisins = ClassifieurVoisins(train_data, test_data)

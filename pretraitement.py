@@ -139,7 +139,7 @@ class PreProc :
 		#for i in range(self.testSize) :
 		#	self.pretraiteImg(i, self.test['X']);
 		self.applatirDonnees();
-		self.PCAVecteur(20)
+		self.PCAVecteur(valPCA)
 		
 
 	
