@@ -25,18 +25,18 @@ def toutTester(trainSize, testSize, valPCA) :
 	classifieurVoisins.tester(200)
 
 	# test du classieur SVM
-	classifieurSVM = ClassifieurSVM(train_data, test_data, trainSize, testSize)
-	classifieurSVM.calibrer()
-	classifieurSVM.tester()
+	# classifieurSVM = ClassifieurSVM(train_data, test_data, trainSize, testSize)
+	# classifieurSVM.calibrer()
+	# classifieurSVM.tester()
 	
 	# test de notre classifieur a distances
-	classifieur = Classifieur(train_data, test_data, trainSize, testSize)
-	classifieur.tester()
+	# classifieur = Classifieur(train_data, test_data, trainSize, testSize)
+	# classifieur.tester()
 
 	print('yes')
 
 
-toutTester(1000, 500, 20)
+toutTester(10000, 5000, 20)
 
 # plt.imshow(train_data['X'][:, :, :, 3])
 # print('Label', train_data['y'][3])

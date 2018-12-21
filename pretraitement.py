@@ -134,8 +134,8 @@ class PreProc :
 		
 	
 	def pretraiteDatas (self, valPCA) :
-		for i in range(self.trainSize) :
-			self.pretraiteImg(i, self.td['X']);
+		# for i in range(self.trainSize) :
+			# self.pretraiteImg(i, self.td['X']);
 		#for i in range(self.testSize) :
 		#	self.pretraiteImg(i, self.test['X']);
 		self.applatirDonnees();
