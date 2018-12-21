@@ -3,20 +3,28 @@ from sklearn import svm
 
 class ClassifieurSVM :
 
-	def __init__(self, train_data, test_data, testSize) :
+	def __init__(self, train_data, test_data, trainSize, testSize) :
 		self.td = train_data
 		self.test = test_data
+		self.trainSize = trainSize
 		self.testSize = testSize
 		self.meilleurC = -1
+		with open('Resultats_SVM.txt', 'w+') as fichier :
+			print('Initialisation du classifieur SVM', file=fichier)
+			print(str(self.test['y'].ravel()[:70]) + ' ...', file=fichier)
 
 	def calibrer(self) :
-		miniN = int(self.testSize/2)
+		if self.trainSize <= 2000 :
+			miniN = int(self.trainSize/2)
+		else :
+			miniN = 1000
 		miniTdX = self.td['X'][:miniN];
 		miniTdy = self.td['y'][:miniN];
 		miniTestX = self.td['X'][-miniN:];
 		miniTesty = self.td['y'][-miniN:];
-
-		print(str(self.test['y'].ravel()))
+		
+		with open('Resultats_SVM.txt', 'a+') as fichier :
+			print('\nCalibrage du classifieur SVM', file=fichier)
 		
 		# On recherche les meilleures valeurs dans une grille logarithmique base 10
 		C_range = np.logspace(-2, 10, 13)
@@ -39,10 +47,10 @@ class ClassifieurSVM :
 					self.meilleurC = C
 					self.meilleurGamma = gamma
 
-
-		print('meilleurTaux intermediaire = ' + str(meilleurTaux))
-		print('meilleurC intermediaire = ' + str(self.meilleurC))
-		print('meilleurGamma intermediaire = ' + str(self.meilleurGamma))
+		with open("Resultats_SVM.txt", "a+") as fichier :
+			print('meilleurTaux intermediaire = ' + str(meilleurTaux), file=fichier)
+			print('meilleurC intermediaire = ' + str(self.meilleurC), file=fichier)
+			print('meilleurGamma intermediaire = ' + str(self.meilleurGamma), file=fichier)
 
 
 		# Pour plus de precision, on cherche ensuite dans une grille logarithmique base 2
@@ -66,16 +74,19 @@ class ClassifieurSVM :
 					self.meilleurC = C
 					self.meilleurGamma = gamma
 
-
-		print('meilleurTaux = ' + str(meilleurTaux))
-		print('meilleurC = ' + str(self.meilleurC))
-		print('meilleurGamma = ' + str(self.meilleurGamma))
+		with open('Resultats_SVM.txt', 'a+') as fichier :
+			print('meilleurTaux = ' + str(meilleurTaux), file=fichier)
+			print('meilleurC = ' + str(self.meilleurC), file=fichier)
+			print('meilleurGamma = ' + str(self.meilleurGamma), file=fichier)
 
 
 	def tester(self) :
 		clf = svm.SVC(gamma=self.meilleurGamma, C=self.meilleurC)
 		clf.fit(self.td['X'], self.td['y'].ravel())  
 		predictions = clf.predict(self.test['X'])
-		print(predictions)
-		tauxExact = np.mean(np.where(self.test['y'].ravel()==predictions, 1, 0))
-		print('tauxExact = ' + str(tauxExact))
+		with open('Resultats_SVM.txt', 'a+') as fichier :
+			print('\nPredictions du classifieur SVM', file=fichier)
+			print(str(predictions[:70]) + ' ...', file=fichier)
+			print(str(np.where(self.test['y'].ravel()==predictions, 1, 0)[:70]) + ' ...', file=fichier)
+			tauxExact = np.mean(np.where(self.test['y'].ravel()==predictions, 1, 0))
+			print('tauxExact = ' + str(tauxExact), file=fichier)

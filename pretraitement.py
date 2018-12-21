@@ -5,9 +5,10 @@ import sklearn.decomposition as SK
 
 class PreProc :
 	
-	def __init__(self, train_data, test_data, testSize) :
+	def __init__(self, train_data, test_data, trainSize, testSize) :
 		self.td = train_data
 		self.test = test_data
+		self.trainSize = trainSize
 		self.testSize = testSize
 		
 	def applatirDonnees(self) :
@@ -132,10 +133,11 @@ class PreProc :
 		self.noirSurBlanc(img_id, img_set)
 		
 	
-	def pretraiteDatas (self) :
-		for i in range(self.testSize) :
+	def pretraiteDatas (self, valPCA) :
+		for i in range(self.trainSize) :
 			self.pretraiteImg(i, self.td['X']);
-			self.pretraiteImg(i, self.test['X']);
+		#for i in range(self.testSize) :
+		#	self.pretraiteImg(i, self.test['X']);
 		self.applatirDonnees();
 		self.PCAVecteur(20)
 		

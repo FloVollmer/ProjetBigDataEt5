@@ -8,15 +8,20 @@ class Classifieur :
 
 	barycentres = []
 
-	def __init__(self, train_data, test_data, testSize) :
+	def __init__(self, train_data, test_data, trainSize, testSize) :
 		self.td = train_data
 		self.test = test_data
+		self.trainSize = trainSize
 		self.testSize = testSize
+		with open('Resultats_Distances.txt', 'w+') as fichier :
+			print('Calcul des barycentres', file=fichier)
 		for i in range(1, 11) :
 			self.barycentres.append(self.barycentreX(i))
 		self.barycentres = np.reshape(self.barycentres, (10, len(self.barycentres[1])))
 			
 	def tester(self) :
+		with open('Resultats_Distances.txt', 'a+') as fichier :
+			print('\nPredictions du classifieur a distances', file=fichier)
 		tauxExact = 0
 		for i in range(0, self.testSize) :
 			labelDeter = self.determinerLabel(self.test['X'][i, :])
@@ -25,7 +30,8 @@ class Classifieur :
 				tauxExact += 1
 			
 		tauxExact /= self.testSize;
-		print('tauxExact = ' + str(tauxExact))
+		with open('Resultats_Distances.txt', 'a+') as fichier :
+			print('tauxExact = ' + str(tauxExact), file=fichier)
 	
 	def determinerLabel(self, image) :
 		dMin = self.distanceEntre2vecteurs(self.barycentres[0], image)
@@ -58,7 +64,7 @@ class Classifieur :
 		return distance
 		
 	def barycentreX(self, label) :
-			tableBool = self.td['y'].squeeze(1)[:self.testSize]==label
+			tableBool = self.td['y'].squeeze(1)[:self.trainSize]==label
 			barycentre = np.mean(self.td['X'][tableBool, :], axis=0)
 			return barycentre
 		
@@ -66,7 +72,7 @@ class Classifieur :
 		# try :
 			# img = Image.open('barycentre' + str(label) + '.png')
 		# except FileNotFoundError :
-			# tableBool = self.td['y'].squeeze(1)[:self.testSize]==label
+			# tableBool = self.td['y'].squeeze(1)[:self.trainSize]==label
 			# barycentre = np.mean(self.td['X'][:, :, :, tableBool], axis=3)
 			# scipy.misc.imsave('barycentre' + str(label) + '.png', barycentre)
 			# return barycentre

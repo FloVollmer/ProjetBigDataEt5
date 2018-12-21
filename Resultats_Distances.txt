@@ -1,0 +1,4 @@
+Calcul des barycentres
+
+Predictions du classifieur a distances
+tauxExact = 0.091
