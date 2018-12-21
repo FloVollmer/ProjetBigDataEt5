@@ -22,7 +22,7 @@ def toutTester(trainSize, testSize, valPCA) :
 	
 	# test du classieur proches voisins
 	classifieurVoisins = ClassifieurVoisins(train_data, test_data)
-	classifieurVoisins.tester()
+	classifieurVoisins.tester(200)
 
 	# test du classieur SVM
 	classifieurSVM = ClassifieurSVM(train_data, test_data, trainSize, testSize)
@@ -36,7 +36,7 @@ def toutTester(trainSize, testSize, valPCA) :
 	print('yes')
 
 
-toutTester(2000, 1000, 20)
+toutTester(1000, 500, 20)
 
 # plt.imshow(train_data['X'][:, :, :, 3])
 # print('Label', train_data['y'][3])

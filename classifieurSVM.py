@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn import svm
+from sklearn.metrics import confusion_matrix
 
 class ClassifieurSVM :
 
@@ -87,6 +88,7 @@ class ClassifieurSVM :
 		with open('Resultats_SVM.txt', 'a+') as fichier :
 			print('\nPredictions du classifieur SVM', file=fichier)
 			print(str(predictions[:70]) + ' ...', file=fichier)
-			print(str(np.where(self.test['y'].ravel()==predictions, 1, 0)[:70]) + ' ...', file=fichier)
 			tauxExact = np.mean(np.where(self.test['y'].ravel()==predictions, 1, 0))
 			print('tauxExact = ' + str(tauxExact), file=fichier)
+			print('Matrice de confusion :' + str(tauxExact), file=fichier)
+			print(confusion_matrix(self.test['y'].ravel(), predictions), file=fichier)

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 import scipy.misc
 from PIL import Image
+from sklearn.metrics import confusion_matrix
 
 class Classifieur :
 
@@ -14,6 +15,7 @@ class Classifieur :
 		self.trainSize = trainSize
 		self.testSize = testSize
 		with open('Resultats_Distances.txt', 'w+') as fichier :
+			print(str(self.test['y'].ravel()[:70]) + ' ...', file=fichier)
 			print('Calcul des barycentres', file=fichier)
 		for i in range(1, 11) :
 			self.barycentres.append(self.barycentreX(i))
@@ -22,16 +24,23 @@ class Classifieur :
 	def tester(self) :
 		with open('Resultats_Distances.txt', 'a+') as fichier :
 			print('\nPredictions du classifieur a distances', file=fichier)
-		tauxExact = 0
+		tauxExact2 = 0
+		predictions = np.empty_like(self.test['y'].ravel())
 		for i in range(0, self.testSize) :
 			labelDeter = self.determinerLabel(self.test['X'][i, :])
+			predictions[i] = labelDeter;
 			# print(str(self.test['y'][i]) + ' -> ' + str(labelDeter))
 			if (labelDeter == self.test['y'][i]) :
-				tauxExact += 1
+				tauxExact2 += 1
 			
-		tauxExact /= self.testSize;
+		tauxExact2 /= self.testSize;
 		with open('Resultats_Distances.txt', 'a+') as fichier :
+			print(str(predictions[:70]) + ' ...', file=fichier)
+			tauxExact = np.mean(np.where(self.test['y'].ravel()==predictions, 1, 0))
 			print('tauxExact = ' + str(tauxExact), file=fichier)
+			print('tauxExact2 = ' + str(tauxExact2), file=fichier)
+			print('Matrice de confusion :' + str(tauxExact), file=fichier)
+			print(confusion_matrix(self.test['y'].ravel(), predictions), file=fichier)
 	
 	def determinerLabel(self, image) :
 		dMin = self.distanceEntre2vecteurs(self.barycentres[0], image)
@@ -64,9 +73,9 @@ class Classifieur :
 		return distance
 		
 	def barycentreX(self, label) :
-			tableBool = self.td['y'].squeeze(1)[:self.trainSize]==label
-			barycentre = np.mean(self.td['X'][tableBool, :], axis=0)
-			return barycentre
+		tableBool = self.td['y'].squeeze(1)[:self.trainSize]==label
+		barycentre = np.mean(self.td['X'][tableBool, :], axis=0)
+		return barycentre
 		
 	# def barycentreX(self, label) :
 		# try :

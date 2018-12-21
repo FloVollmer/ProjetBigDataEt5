@@ -1,5 +1,6 @@
 import numpy as np
-from sklearn.neighbors.nearest_centroid import NearestCentroid
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
 
 class ClassifieurVoisins :
 
@@ -10,14 +11,15 @@ class ClassifieurVoisins :
 			print('Initialisation du classifieur Voisins', file=fichier)
 			print(str(self.test['y'].ravel()[:70]) + ' ...', file=fichier)
 
-	def tester(self) :
+	def tester(self, nbVoisins) :
 
-		clf = NearestCentroid()
+		clf = KNeighborsClassifier(n_neighbors=nbVoisins)
 		clf.fit(self.td['X'], self.td['y'].ravel())  
 		predictions = clf.predict(self.test['X'])
 		with open('Resultats_Voisins.txt', 'a+') as fichier :
 			print('\nPredictions du classifieur Voisins', file=fichier)
 			print(str(predictions[:70]) + ' ...', file=fichier)
-			print(str(np.where(self.test['y'].ravel()==predictions, 1, 0)[:70]) + ' ...', file=fichier)
 			tauxExact = np.mean(np.where(self.test['y'].ravel()==predictions, 1, 0))
 			print('tauxExact = ' + str(tauxExact), file=fichier)
+			print('Matrice de confusion :' + str(tauxExact), file=fichier)
+			print(confusion_matrix(self.test['y'].ravel(), predictions), file=fichier)
